@@ -37,6 +37,7 @@
 // });
 
 // yargs.parse();
+const Chalk = require("chalk");
 var fs = require("fs");
 
 var argv = require("yargs/yargs")(process.argv.slice(2)).argv;
@@ -59,9 +60,11 @@ fs.readFile("notes.json", "utf-8", function (err, data) {
         title: argv.title,
         body: argv.body,
       });
-      fs.writeFile("notes.json", JSON.stringify(notes), function (err) {});
+      fs.writeFile("notes.json", JSON.stringify(notes), function (err) {
+        console.log(Chalk.bgGreen("New note created"));
+      });
     } else {
-      console.log("Warning: Already exists!");
+      console.log(Chalk.red("Warning: Already exists!"));
     }
   } else if (c === "remove") {
     var l = notes.filter(function (v) {
@@ -81,18 +84,22 @@ fs.readFile("notes.json", "utf-8", function (err, data) {
             return true;
           })
         ),
-        function () {}
+        function () {
+          console.log(Chalk.bgGreen("Note removed"));
+        }
       );
     } else {
-      console.log("Warning: Don't exist!");
+      console.log(Chalk.red("Warning: Don't exist!"));
     }
   } else if (c === "list") {
     notes.forEach((e) => {
+      console.log(Chalk.bgBlue("Your notes:"));
       console.log(e.title + "\n");
     });
   } else if (c === "read") {
     notes.forEach((e) => {
       if (e.title === argv.title) {
+        console.log(Chalk.bgYellow("List"));
         console.log(e.body);
       }
     });
